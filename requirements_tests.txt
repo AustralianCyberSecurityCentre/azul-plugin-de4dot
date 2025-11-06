@@ -1,0 +1,11 @@
+black
+azul-runner[test-utils]
+cart
+bandit
+flake8
+flake8-bugbear
+flake8-docstrings
+pre-commit
+pytest
+pytest-cov
+tox

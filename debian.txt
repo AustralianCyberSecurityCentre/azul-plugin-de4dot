@@ -1,0 +1,4 @@
+libmagic-dev
+file
+apt-transport-https
+dotnet-runtime-3.1
