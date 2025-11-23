@@ -32,16 +32,12 @@ class TestExecute(test_template.TestPlugin):
                 )
             ]
         )
-        JobResult(
-            state=State(
-                State.Label.ERROR_EXCEPTION,
-                failure_name="AssertionError",
-            )
-        )
         self.assertJobResult(
             result,
             # No features should be set if no known obfuscator is detected
-            JobResult(state=State(State.Label.COMPLETED_EMPTY)),
+            JobResult(
+                state=State(State.Label.COMPLETED_EMPTY, message="De4dot does not know how to deobfuscate this file.")
+            ),
         )
 
     def test_obfus_dotnet(self):
@@ -81,7 +77,12 @@ class TestExecute(test_template.TestPlugin):
                 )
             ]
         )
-        self.assertJobResult(result, JobResult(state=State(State.Label.COMPLETED_EMPTY)))
+        self.assertJobResult(
+            result,
+            JobResult(
+                state=State(State.Label.COMPLETED_EMPTY, message="De4dot does not know how to deobfuscate this file.")
+            ),
+        )
 
     def test_dotnet_smart_assembly(self):
         result = self.do_execution(
@@ -121,7 +122,18 @@ class TestExecute(test_template.TestPlugin):
                 )
             ]
         )
-        self.assertJobResult(result, JobResult(state=State(State.Label.COMPLETED_EMPTY)))
+        self.assertJobResult(
+            result,
+            JobResult(
+                state=State(State.Label.COMPLETED),
+                events=[
+                    Event(
+                        sha256="45dc4518fbf43bf4611446159f72cdbc37641707bb924bd2a52644a3af5bab76",
+                        features={"obfuscator": [FV(".NET Reactor")]},
+                    )
+                ],
+            ),
+        )
 
     def test_obfus_dotnet_manually_obfuscated(self):
         result = self.do_execution(
@@ -135,7 +147,12 @@ class TestExecute(test_template.TestPlugin):
                 )
             ]
         )
-        self.assertJobResult(result, JobResult(state=State(State.Label.COMPLETED_EMPTY)))
+        self.assertJobResult(
+            result,
+            JobResult(
+                state=State(State.Label.COMPLETED_EMPTY, message="De4dot does not know how to deobfuscate this file.")
+            ),
+        )
 
     def test_malformed_dotnet_file(self):
         """Test a run where the file is a mono dotnet file but has content has been modified."""
