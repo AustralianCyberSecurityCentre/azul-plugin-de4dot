@@ -38,6 +38,20 @@ tox -e style
 tox -e test
 ```
 
+## Building de4dot
+
+de4dot was built from the github repo https://github.com/kant2002/de4dot
+
+From the release artifacts in an ubuntu maching using the command:
+
+```bash
+dotnet build de4dot.netcore.sln  --configuration Release --framework net8.0
+```
+
+The entire release directory was then copied into `de4dot_<date-compiled>_netcore8`
+
+NOTE - dotnet 8 was installed first.
+
 ## Dependency management
 
 Dependencies are managed in the requirements.txt, requirements_test.txt and debian.txt file.
