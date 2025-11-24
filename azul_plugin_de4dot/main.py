@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 class De4dot(BinaryPlugin):
     """De4dot .NET deobfuscator plugin."""
 
-    VERSION = "2025.02.07"  # Note de4dot hasn't been updated in a long time, see https://github.com/0xd4d/de4dot
+    VERSION = "2025.11.24"  # Note de4dot is about a year old https://github.com/kant2002/de4dot (net8 from source)
     FEATURES = [Feature("obfuscator", desc="Name of obfuscator detected by de4dot", type=FeatureType.String)]
     SETTINGS = add_settings(
         filter_data_types={
@@ -61,7 +61,7 @@ class De4dot(BinaryPlugin):
 
         with tempfile.NamedTemporaryFile() as deob_out_file:
             de4dot_exe = os.path.join(
-                os.path.dirname(os.path.realpath(__file__)), "de4dot_20200609_netcore3", "de4dot.dll"
+                os.path.dirname(os.path.realpath(__file__)), "de4dot_20251124_netcore8", "linux-x64", "de4dot.dll"
             )
             command = [
                 "dotnet",
@@ -93,12 +93,11 @@ class De4dot(BinaryPlugin):
                 logger.error("Timed out running de4dot on %s" % job.id)
                 return State(State.Label.ERROR_EXCEPTION, "Timeout executing de4dot", message=traceback.format_exc())
 
+            # Handle case that de4dot can detect the file is obfuscated but doesn't know how to reverse it.
+            if "Detected Unknown Obfuscator" in res.stdout:
+                return State(State.Label.COMPLETED_EMPTY, message="De4dot does not know how to deobfuscate this file.")
+
             if res.returncode != 0:
-                # Handle case that de4dot can detect the file is obfuscated but doesn't know how to reverse it.
-                if "Detected Unknown Obfuscator" in res.stdout:
-                    return State(
-                        State.Label.COMPLETED_EMPTY, message="De4dot does not know how to deobfuscate this file."
-                    )
                 return State(
                     State.Label.ERROR_EXCEPTION, message=f"Unexpected error occurred when deobfuscating {res.stderr}"
                 )

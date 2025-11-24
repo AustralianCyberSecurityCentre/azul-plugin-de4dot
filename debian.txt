@@ -1,4 +1,4 @@
 libmagic-dev
 file
 apt-transport-https
-dotnet-runtime-3.1
+dotnet-runtime-8.0

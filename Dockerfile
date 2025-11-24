@@ -1,8 +1,8 @@
 ARG REGISTRY="docker.io/library"
 ARG BUILD_IMAGE='python'
-ARG BUILD_TAG='3.12-bookworm'
+ARG BUILD_TAG='3.12-trixie'
 ARG BASE_IMAGE='python'
-ARG BASE_TAG='3.12-slim-bookworm'
+ARG BASE_TAG='3.12-slim-trixie'
 
 FROM $REGISTRY/$BUILD_IMAGE:$BUILD_TAG AS builder
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,20 +14,15 @@ ARG PIP_INDEX_URL
 ARG GIT_BRANCH_NAME
 ARG PIP_EXTRA_INDEX_URL
 
-# Install libssl1.1
-RUN apt-get update && \
-    apt-get install wget -y --no-install-recommends
+COPY debian.txt /tmp/src/
 
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-RUN dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-
+# Add micoroft gpg keys.
 RUN apt-get update && \
     apt-get install curl -y --no-install-recommends && \
-    curl -sSL -O https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb && \
+    curl -sSL -O https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb
 
-COPY debian.txt /tmp/src/
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
@@ -55,23 +50,15 @@ RUN if [ "$GIT_BRANCH_NAME" = "refs/heads/dev" ] ; then \
 
 FROM $REGISTRY/$BASE_IMAGE:$BASE_TAG AS base
 ENV DEBIAN_FRONTEND=noninteractive
-# Dotnet env to allow dotnet-core-3 to work still
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
-# Install libssl1.1
-RUN apt-get update && \
-    apt-get install wget -y --no-install-recommends
-
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-RUN dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+COPY debian.txt /tmp/src/
 
 # Add micoroft gpg keys.
 RUN apt-get update && \
     apt-get install curl -y --no-install-recommends && \
-    curl -sSL -O https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb && \
+    curl -sSL -O https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm packages-microsoft-prod.deb
 
-COPY debian.txt /tmp/src/
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
