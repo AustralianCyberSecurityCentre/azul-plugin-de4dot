@@ -57,8 +57,7 @@ class TestExecute(test_template.TestPlugin):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="e05ecc14c86d96d64495434a7e34f35588538ae2e6da20c2dacc4a97001c35df",
+                        sha256="e05ecc14c86d96d64495434a7e34f35588538ae2e6da20c2dacc4a97001c35df",
                         features={"obfuscator": [FV(".NET Reactor 4.0")]},
                     )
                 ],
@@ -102,8 +101,7 @@ class TestExecute(test_template.TestPlugin):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="f5d82956ceca26f10317df7cfbfacfe99d3854b8aa3fea507e28676f6a6cd9ed",
+                        sha256="f5d82956ceca26f10317df7cfbfacfe99d3854b8aa3fea507e28676f6a6cd9ed",
                         features={"obfuscator": [FV("SmartAssembly 6.9.0.114")]},
                     )
                 ],
@@ -166,8 +164,7 @@ class TestExecute(test_template.TestPlugin):
                 state=State(State.Label.COMPLETED),
                 events=[
                     Event(
-                        entity_type="binary",
-                        entity_id="b13049711027802304b0f50291d5557e76113b46c0a2258b919e65d519ace2f2",
+                        sha256="b13049711027802304b0f50291d5557e76113b46c0a2258b919e65d519ace2f2",
                         features={"malformed": [FV("Malformed dotnet file (may be version > 3.1).")]},
                     )
                 ],

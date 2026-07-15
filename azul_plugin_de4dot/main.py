@@ -78,7 +78,7 @@ class De4dot(BinaryPlugin):
                     stdin=None,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
-                    timeout=self.cfg.subprocess_timeout,
+                    timeout=self.cfg.subprocess_timeout,  # ty: ignore[unresolved-attribute] ty does not understand add_settings()
                     encoding="utf8",
                 )
             except OSError as e:
