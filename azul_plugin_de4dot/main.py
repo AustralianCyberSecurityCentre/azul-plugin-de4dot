@@ -73,7 +73,7 @@ class De4dot(BinaryPlugin):
             ]
 
             try:
-                res: subprocess.CompletedProcess = subprocess.run(  # nosec: B603
+                res: subprocess.CompletedProcess = subprocess.run(  # noqa: S603
                     args=command,
                     stdin=None,
                     stdout=subprocess.PIPE,
